@@ -45,6 +45,10 @@ class Question {
     @Expose
     var title: String? = null
 
+    @SerializedName("body")
+    @Expose
+    var body: String? = null
+
     @SerializedName("last_edit_date")
     @Expose
     var lastEditDate: Int? = null
