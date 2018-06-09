@@ -1,8 +1,13 @@
 package io.github.anvell.stackoverview.view
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.Lifecycle.State.*
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.widget.Toast
@@ -13,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +28,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         initObservers()
-        initFragments()
+
+        if(savedInstanceState == null) {
+            initFragments()
+        }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -34,6 +42,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let {
+            viewModel.submitQuery(newText)
+        }
         return true
     }
 
@@ -43,6 +54,24 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 onResultSelected(it)
             }
         })
+
+        viewModel.connectionStatus().observe(this, Observer {
+            it?.let {
+                if(!it && lifecycle.currentState.isAtLeast(RESUMED)) {
+                    displayConnectionWarning()
+                }
+            }
+        })
+    }
+
+    private fun displayConnectionWarning() {
+        Snackbar.make(currentFocus, R.string.error_no_connection, Snackbar.LENGTH_LONG).apply {
+            setAction(R.string.error_no_connection_button_label, {
+                val intent = Intent(Settings.ACTION_SETTINGS)
+                startActivity(intent)
+            })
+            show()
+        }
     }
 
     private fun initFragments() {
