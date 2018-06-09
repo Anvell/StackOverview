@@ -3,4 +3,9 @@
     <string name="hint_search">Search</string>
     <string name="error_no_connection">Internet connection is not available</string>
     <string name="error_no_connection_button_label">Settings</string>
+
+    <string name="search_results_item_answers">%1$d answer</string>
+    <string name="search_results_item_answers_plural">%1$d answers</string>
+    <string name="search_results_item_votes">%1$d vote</string>
+    <string name="search_results_item_votes_plural">%1$d votes</string>
 </resources>

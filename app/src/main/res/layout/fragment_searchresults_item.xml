@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="@dimen/text_margin">
 
     <TextView
         android:id="@+id/questionTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Lorem ipsum" />
+
+    <TextView
+        android:id="@+id/questionVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin_small"
+        android:background="@drawable/chip_frame"
+        android:padding="@dimen/text_margin_small"
+        style="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textColor="@android:color/secondary_text_light"
+        app:layout_constraintTop_toBottomOf="@+id/questionTitle"
+        tools:text="4566 votes" />
+
+    <TextView
+        android:id="@+id/questionAnswers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin_small"
+        android:paddingEnd="@dimen/text_margin_small"
+        android:paddingStart="@dimen/text_margin_small"
+        style="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textColor="@android:color/secondary_text_light"
+        app:layout_constraintBottom_toBottomOf="@id/questionVotes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/questionVotes"
+        app:layout_constraintTop_toTopOf="@+id/questionVotes"
+        tools:text="15 answers" />
+
+</android.support.constraint.ConstraintLayout>

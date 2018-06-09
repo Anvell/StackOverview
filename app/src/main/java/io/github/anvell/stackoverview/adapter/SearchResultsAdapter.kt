@@ -20,8 +20,8 @@ class SearchResultsAdapter(
     private val listener: View.OnClickListener
 
     init {
-        listener = View.OnClickListener { v ->
-            val item = v.tag as Question
+        listener = View.OnClickListener {
+            val item = it.tag as Question
             interactionListener?.onSearchResultsInteraction(item)
         }
     }
@@ -39,7 +39,7 @@ class SearchResultsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        item.title?.let { holder.bind(it) }
+        holder.bind(item)
 
         with(holder.view) {
             tag = item
@@ -51,8 +51,19 @@ class SearchResultsAdapter(
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(title: String) {
-            view.questionTitle.text = title
+        fun bind(item: Question) {
+            view.questionTitle.text = item.title
+
+            val answers = resourceString(if (item.answerCount != 1) R.string.search_results_item_answers_plural
+                                         else R.string.search_results_item_answers)
+            view.questionAnswers.text = String.format(answers, item.answerCount)
+
+            val votes = resourceString(if (item.score != 1) R.string.search_results_item_votes_plural
+                                       else R.string.search_results_item_votes)
+            view.questionVotes.text = String.format(votes, item.score)
+
         }
+
+        private fun resourceString(id: Int): String = view.context.getString(id)
     }
 }

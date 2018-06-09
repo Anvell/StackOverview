@@ -30,8 +30,8 @@ class MainViewModel : ViewModel() {
     fun submitQuery(query: String) = querySubject.onNext(query)
 
     private fun onDataResponse(data: QuestionsResponse) {
-        data.items?.let {
-            questions.value = it.toMutableList()
+        if(data.items.isNotEmpty()) {
+            questions.value = data.items.toMutableList()
         }
     }
 
