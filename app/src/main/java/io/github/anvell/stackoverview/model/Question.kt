@@ -1,60 +1,19 @@
 package io.github.anvell.stackoverview.model
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Question {
-
-    @SerializedName("tags")
-    @Expose
-    var tags: List<String>? = null
-
-    @SerializedName("is_answered")
-    @Expose
-    var isAnswered: Boolean? = null
-
-    @SerializedName("view_count")
-    @Expose
-    var viewCount: Int? = null
-
-    @SerializedName("answer_count")
-    @Expose
-    var answerCount: Int? = null
-
-    @SerializedName("score")
-    @Expose
-    var score: Int? = null
-
-    @SerializedName("last_activity_date")
-    @Expose
-    var lastActivityDate: Int? = null
-
-    @SerializedName("creation_date")
-    @Expose
-    var creationDate: Int? = null
-
-    @SerializedName("question_id")
-    @Expose
-    var questionId: Int? = null
-
-    @SerializedName("link")
-    @Expose
-    var link: String? = null
-
-    @SerializedName("title")
-    @Expose
-    var title: String? = null
-
-    @SerializedName("body")
-    @Expose
-    var body: String? = null
-
-    @SerializedName("last_edit_date")
-    @Expose
-    var lastEditDate: Int? = null
-
-    @SerializedName("accepted_answer_id")
-    @Expose
-    var acceptedAnswerId: Int? = null
-
-}
+data class Question (
+    @SerializedName("tags") val tags: List<String>,
+    @SerializedName("is_answered") val isAnswered: Boolean,
+    @SerializedName("view_count") val viewCount: Int,
+    @SerializedName("answer_count") val answerCount: Int,
+    @SerializedName("score") val score: Int,
+    @SerializedName("last_activity_date") val lastActivityDate: Int,
+    @SerializedName("creation_date") val creationDate: Int,
+    @SerializedName("question_id") val questionId: Int,
+    @SerializedName("link") val link: String,
+    @SerializedName("title") val title: String,
+    @SerializedName("body") val body: String,
+    @SerializedName("last_edit_date") val lastEditDate : Int,
+    @SerializedName("accepted_answer_id") val acceptedAnswerId: Int
+)
