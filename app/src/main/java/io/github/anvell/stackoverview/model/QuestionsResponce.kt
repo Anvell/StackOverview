@@ -1,15 +1,13 @@
 package io.github.anvell.stackoverview.model
 
-import android.content.ClipData.Item
-
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class QuestionsResponce {
+class QuestionsResponse {
 
     @SerializedName("items")
     @Expose
-    var items: List<Item>? = null
+    var items: List<Question>? = null
 
     @SerializedName("has_more")
     @Expose

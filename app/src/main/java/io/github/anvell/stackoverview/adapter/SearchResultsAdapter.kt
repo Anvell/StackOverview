@@ -1,7 +1,6 @@
 package io.github.anvell.stackoverview.adapter
 
 import android.support.v7.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_searchresults_item.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,12 @@ import io.github.anvell.stackoverview.model.Question
 import kotlinx.android.synthetic.main.fragment_searchresults_item.view.*
 
 class SearchResultsAdapter(
-        private val values: MutableList<Question>,
-        private val interactionListener: OnInteractionListener?)
+        private var values: MutableList<Question>,
+        private val interactionListener: OnSearchResultsListener?)
     : RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
-    interface OnInteractionListener {
-        fun onListFragmentInteraction(item: Question?)
+    interface OnSearchResultsListener {
+        fun onSearchResultsInteraction(item: Question)
     }
 
     private val listener: View.OnClickListener
@@ -23,8 +22,13 @@ class SearchResultsAdapter(
     init {
         listener = View.OnClickListener { v ->
             val item = v.tag as Question
-            interactionListener?.onListFragmentInteraction(item)
+            interactionListener?.onSearchResultsInteraction(item)
         }
+    }
+
+    fun replaceItems(newValues: MutableList<Question>) {
+        values = newValues
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

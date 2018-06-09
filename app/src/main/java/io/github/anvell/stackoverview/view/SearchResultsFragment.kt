@@ -6,54 +6,48 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.anvell.stackoverview.R
 import io.github.anvell.stackoverview.adapter.SearchResultsAdapter
-import io.github.anvell.stackoverview.adapter.SearchResultsAdapter.OnInteractionListener
+import io.github.anvell.stackoverview.adapter.SearchResultsAdapter.OnSearchResultsListener
 import io.github.anvell.stackoverview.model.Question
 import io.github.anvell.stackoverview.viewmodel.MainViewModel
+import kotlinx.android.synthetic.main.fragment_searchresults.*
 
-class SearchResultsFragment : Fragment(), OnInteractionListener {
+class SearchResultsFragment : Fragment(), OnSearchResultsListener {
 
-    private lateinit var questionsView: RecyclerView
     private lateinit var viewModel: MainViewModel
+    private lateinit var resultsAdapter: SearchResultsAdapter
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View?
+        = inflater.inflate(R.layout.fragment_searchresults, container, false)
 
-        activity?.let {
-            viewModel = ViewModelProviders.of(it).get(MainViewModel::class.java)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        initQuestions()
+        viewModel = ViewModelProviders.of(requireActivity()).get(MainViewModel::class.java)
+
+        initResultsList()
         initObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_searchresults, container, false)
-
-        if (view is RecyclerView) {
-            questionsView = view
-        }
-        return view
-    }
-
-    override fun onListFragmentInteraction(item: Question?) {
+    override fun onSearchResultsInteraction(item: Question) {
         viewModel.selectedQuestion.value = item
     }
 
-    private fun initQuestions() {
-        viewModel.questions.value?.let {
-            questionsView.layoutManager = LinearLayoutManager(context)
-            questionsView.adapter = SearchResultsAdapter(it, this)
+    private fun initResultsList() {
+
+        resultsAdapter = SearchResultsAdapter(viewModel.questions.value?: mutableListOf(), this)
+        with(searchResults) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = resultsAdapter
         }
 
         DividerItemDecoration(context, DividerItemDecoration.VERTICAL).let {
-            questionsView.addItemDecoration(it)
+            searchResults.addItemDecoration(it)
         }
     }
 
@@ -61,7 +55,7 @@ class SearchResultsFragment : Fragment(), OnInteractionListener {
 
         viewModel.questions.observe(this, Observer {
             it?.let {
-                questionsView.adapter.notifyDataSetChanged()
+                resultsAdapter.replaceItems(it)
             }
         })
     }
