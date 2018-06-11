@@ -1,29 +1,34 @@
 package io.github.anvell.stackoverview.view
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Lifecycle.State.*
+import android.arch.lifecycle.Lifecycle.State.RESUMED
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
+import android.view.Menu
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import io.github.anvell.stackoverview.R
-import io.github.anvell.stackoverview.model.Question
+import io.github.anvell.stackoverview.enumeration.ActiveScreen
+import io.github.anvell.stackoverview.model.QuestionDetails
 import io.github.anvell.stackoverview.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        searchView.setOnQueryTextListener(this)
+        setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
@@ -32,6 +37,22 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         if(savedInstanceState == null) {
             initFragments()
         }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            toolbar.elevation = 4f
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        menu?.let {
+            val mi = menu.findItem(R.id.mi_search_view)
+            searchView = mi.actionView as SearchView
+            searchView.setOnQueryTextListener(this)
+            searchView.imeOptions = searchView.imeOptions or EditorInfo.IME_FLAG_NO_EXTRACT_UI
+        }
+        return true
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -49,9 +70,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun initObservers() {
-        viewModel.selectedQuestion.observe(this, Observer {
+        viewModel.activeScreen.observe(this, Observer {
             it?.let {
-                onResultSelected(it)
+                if(lifecycle.currentState.isAtLeast(RESUMED)) {
+                    navigate(it)
+                }
             }
         })
 
@@ -76,11 +99,23 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun initFragments() {
         supportFragmentManager.beginTransaction()
-                .add(R.id.mainFragment, SearchResultsFragment())
+                .add(R.id.mainFragment, SearchResultsFragment(), SearchResultsFragment.TAG)
                 .commit()
     }
 
-    private fun onResultSelected(item: Question) {
-        Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+    private fun navigate(screen: ActiveScreen) {
+        when(screen) {
+            ActiveScreen.DETAILS -> {
+                searchView.onActionViewCollapsed()
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainFragment, DetailsFragment(), DetailsFragment.TAG)
+                        .addToBackStack(null)
+                        .commit()
+            }
+            ActiveScreen.SEARCH -> {
+
+            }
+        }
     }
+
 }
