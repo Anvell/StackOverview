@@ -1,13 +1,19 @@
 package io.github.anvell.stackoverview.repository
 
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
+import io.github.anvell.stackoverview.model.QuestionDetails
 import io.github.anvell.stackoverview.model.QuestionsResponse
+import io.github.anvell.stackoverview.model.ResponseBase
 import io.github.anvell.stackoverview.network.ApiClient
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import android.R.attr.delay
+import io.reactivex.SingleTransformer
+
+
 
 class StackOverflowRepository {
 
@@ -35,4 +41,12 @@ class StackOverflowRepository {
                 .doOnNext { setConnectionStatus(true) }
                 .retryWhen { it.delay(REQUEST_DELAY, TimeUnit.MILLISECONDS) }
     }
+
+    fun requestQuestion(id: Int): Single<ResponseBase<QuestionDetails>> {
+        return ApiClient.client.requestQuestion(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { setConnectionStatus(false) }
+    }
+
 }
