@@ -18,6 +18,10 @@ import kotlinx.android.synthetic.main.fragment_searchresults.*
 
 class SearchResultsFragment : Fragment(), OnSearchResultsListener {
 
+    companion object {
+        const val TAG = "SEARCH_RESULTS_FRAGMENT"
+    }
+
     private lateinit var viewModel: MainViewModel
     private lateinit var resultsAdapter: SearchResultsAdapter
 
@@ -34,9 +38,8 @@ class SearchResultsFragment : Fragment(), OnSearchResultsListener {
         initObservers()
     }
 
-    override fun onSearchResultsInteraction(item: Question) {
-        viewModel.selectedQuestion.value = item
-    }
+    override fun onSearchResultsInteraction(item: Question)
+        = viewModel.requestQuestion(item.questionId)
 
     private fun initResultsList() {
 
