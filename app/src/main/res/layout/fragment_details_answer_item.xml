@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/text_margin">
+
+    <View
+    android:id="@+id/divider"
+    android:layout_width="match_parent"
+    android:background="@color/colorGreyBackground"
+    android:layout_height="1dp" />
+
+    <ImageView
+        android:id="@+id/iconAccepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/iconAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iconAvatar"
+        app:srcCompat="@drawable/ic_check"
+        android:contentDescription="@string/answer_accepted" />
+
+    <TextView
+        android:id="@+id/postOwner"
+        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_margin"
+        android:textColor="@android:color/secondary_text_light"
+        app:layout_constraintStart_toEndOf="@+id/iconAvatar"
+        app:layout_constraintTop_toTopOf="@+id/iconAvatar"
+        tools:text="Name" />
+
+    <ImageView
+        android:id="@+id/iconAvatar"
+        android:layout_width="@dimen/icon_avatar"
+        android:layout_height="@dimen/icon_avatar"
+        android:layout_marginTop="@dimen/text_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:srcCompat="@color/colorGreyBackground"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/postedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin_subhead"
+        tools:text="Posted 15.05.2018"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        app:layout_constraintStart_toEndOf="@+id/iconAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/postOwner" />
+
+    <TextView
+        android:id="@+id/answerBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        style="@style/Base.TextAppearance.AppCompat.Small"
+        app:layout_constraintTop_toBottomOf="@+id/iconAvatar"
+        tools:text="@string/lorem_ipsum" />
+
+</android.support.constraint.ConstraintLayout>

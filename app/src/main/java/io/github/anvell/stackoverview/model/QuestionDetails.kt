@@ -3,8 +3,8 @@ package io.github.anvell.stackoverview.model
 import com.google.gson.annotations.SerializedName
 
 data class QuestionDetails (
-    @SerializedName("tags") val tags: List<String>,
-    @SerializedName("answers") val answers: MutableList<Answer>,
+    @SerializedName("tags") val tags: List<String>?,
+    @SerializedName("answers") val answers: MutableList<Answer>?,
     @SerializedName("owner") val owner: Owner,
     @SerializedName("view_count") val viewCount: Int,
     @SerializedName("score") val score: Int,

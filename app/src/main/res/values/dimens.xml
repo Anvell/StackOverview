@@ -2,4 +2,6 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_margin_small">6dp</dimen>
+    <dimen name="text_margin_subhead">8dp</dimen>
+    <dimen name="icon_avatar">48dp</dimen>
 </resources>
