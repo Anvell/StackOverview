@@ -8,16 +8,18 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.Snackbar
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
+import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import io.github.anvell.stackoverview.R
 import io.github.anvell.stackoverview.enumeration.ActiveScreen
-import io.github.anvell.stackoverview.model.QuestionDetails
 import io.github.anvell.stackoverview.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import android.animation.LayoutTransition
+import android.widget.LinearLayout
 
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
@@ -32,15 +34,26 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
+        setupHomeIcon(viewModel.activeScreen.value!!)
         initObservers()
 
         if(savedInstanceState == null) {
             initFragments()
         }
 
+        toolbar.setNavigationOnClickListener {
+            viewModel.clearSelectedQuestion()
+            navigate(ActiveScreen.SEARCH)
+        }
+
         if (Build.VERSION.SDK_INT >= 21) {
             toolbar.elevation = 4f
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        viewModel.clearSelectedQuestion()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,7 +62,15 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         menu?.let {
             val mi = menu.findItem(R.id.mi_search_view)
             searchView = mi.actionView as SearchView
+            val searchBar = searchView.findViewById(R.id.search_bar) as LinearLayout
+            searchBar.layoutTransition = LayoutTransition()
+
             searchView.setOnQueryTextListener(this)
+            searchView.setOnCloseListener {
+                viewModel.selectedQuestion.value?.let { navigate(ActiveScreen.DETAILS) }
+                false
+            }
+
             searchView.imeOptions = searchView.imeOptions or EditorInfo.IME_FLAG_NO_EXTRACT_UI
         }
         return true
@@ -57,9 +78,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         query?.let {
+            searchView.clearFocus()
+            searchView.onActionViewCollapsed()
             viewModel.submitQuery(query)
         }
-        return true
+        return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
@@ -85,10 +108,24 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
             }
         })
+
+        viewModel.isBusy.observe(this, Observer {
+            progressIndicator.visibility = when (it!!) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
+        })
+    }
+
+    private fun setupHomeIcon(screen: ActiveScreen) {
+        toolbar.navigationIcon = when (screen) {
+            ActiveScreen.DETAILS -> ResourcesCompat.getDrawable(resources, R.drawable.ic_back, null)
+            ActiveScreen.SEARCH -> ResourcesCompat.getDrawable(resources, R.drawable.ic_code, null)
+        }
     }
 
     private fun displayConnectionWarning() {
-        Snackbar.make(currentFocus, R.string.error_no_connection, Snackbar.LENGTH_LONG).apply {
+        Snackbar.make(toolbar, R.string.error_no_connection, Snackbar.LENGTH_LONG).apply {
             setAction(R.string.error_no_connection_button_label, {
                 val intent = Intent(Settings.ACTION_SETTINGS)
                 startActivity(intent)
@@ -98,12 +135,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun initFragments() {
+        val (fragment, tag) = when (viewModel.activeScreen.value) {
+            ActiveScreen.DETAILS -> Pair(DetailsFragment(), DetailsFragment.TAG)
+            ActiveScreen.SEARCH -> Pair(SearchResultsFragment(), SearchResultsFragment.TAG)
+            else -> return
+        }
+
         supportFragmentManager.beginTransaction()
-                .add(R.id.mainFragment, SearchResultsFragment(), SearchResultsFragment.TAG)
+                .add(R.id.mainFragment, fragment, tag)
                 .commit()
     }
 
-    private fun navigate(screen: ActiveScreen) {
+    private fun navigate(screen: ActiveScreen): Boolean {
         when(screen) {
             ActiveScreen.DETAILS -> {
                 searchView.onActionViewCollapsed()
@@ -112,10 +155,16 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         .addToBackStack(null)
                         .commit()
             }
-            ActiveScreen.SEARCH -> {
 
+            ActiveScreen.SEARCH -> {
+                with(supportFragmentManager) {
+                    if (backStackEntryCount > 0) {
+                        popBackStack()
+                    }
+                }
             }
         }
+        setupHomeIcon(screen)
+        return true
     }
-
 }
