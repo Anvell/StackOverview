@@ -10,10 +10,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import android.R.attr.delay
-import io.reactivex.SingleTransformer
-
-
 
 class StackOverflowRepository {
 
@@ -33,8 +29,8 @@ class StackOverflowRepository {
         }
     }
 
-    fun searchQuestions(query: String): Observable<QuestionsResponse> {
-        return ApiClient.client.searchQuestions(query)
+    fun searchQuestions(query: String, page: Int): Observable<QuestionsResponse> {
+        return ApiClient.client.searchQuestions(query, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { setConnectionStatus(false) }
@@ -47,6 +43,7 @@ class StackOverflowRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { setConnectionStatus(false) }
+                .doAfterSuccess { setConnectionStatus(true) }
     }
 
 }
