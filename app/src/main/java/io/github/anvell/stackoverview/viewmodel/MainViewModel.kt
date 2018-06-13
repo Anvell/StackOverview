@@ -2,18 +2,14 @@ package io.github.anvell.stackoverview.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import io.github.anvell.stackoverview.enumeration.ActiveScreen
 import io.github.anvell.stackoverview.model.Question
 import io.github.anvell.stackoverview.model.QuestionDetails
 import io.github.anvell.stackoverview.model.QuestionsResponse
 import io.github.anvell.stackoverview.model.ResponseBase
 import io.github.anvell.stackoverview.repository.StackOverflowRepository
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import java.net.URLDecoder
 import java.util.concurrent.TimeUnit
 
 class MainViewModel : ViewModel() {
@@ -22,9 +18,10 @@ class MainViewModel : ViewModel() {
     val activeScreen = MutableLiveData<ActiveScreen>()
     val selectedQuestion = MutableLiveData<QuestionDetails?>()
     val questions = MutableLiveData<MutableList<Question>>()
+    var repository = StackOverflowRepository()
     private val querySubject = PublishSubject.create<Query>()
-    private val repository = StackOverflowRepository()
     private var lastQuery = Query()
+    private val disposables = CompositeDisposable()
 
     init {
         isBusy.value = false
@@ -59,11 +56,15 @@ class MainViewModel : ViewModel() {
     }
 
     fun requestQuestion(id: Int) {
-        repository.requestQuestion(id)
-                  .doOnSubscribe { isBusy.postValue(true) }
-                  .doFinally { isBusy.postValue(false) }
-                  .subscribe ({ r -> onDataResponse(r) },
-                   { /* TODO: Handle different exceptions */ })
+        disposables.clear()
+
+        disposables.add(
+            repository.requestQuestion(id)
+                      .doOnSubscribe { isBusy.postValue(true) }
+                      .doFinally { isBusy.postValue(false) }
+                      .subscribe ({ r -> onDataResponse(r) },
+                       { /* TODO: Handle different exceptions */ })
+        )
     }
 
     private fun onDataResponse(data: ResponseBase<QuestionDetails>) {
