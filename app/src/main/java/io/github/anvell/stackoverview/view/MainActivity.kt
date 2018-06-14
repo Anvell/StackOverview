@@ -67,7 +67,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
             searchView.setOnQueryTextListener(this)
             searchView.setOnCloseListener {
-                viewModel.selectedQuestion.value?.let { navigate(ActiveScreen.DETAILS) }
+                viewModel.selectedQuestion.value?.let {
+                    if(viewModel.activeScreen.value != ActiveScreen.DETAILS)
+                        navigate(ActiveScreen.DETAILS)
+                }
                 false
             }
 
