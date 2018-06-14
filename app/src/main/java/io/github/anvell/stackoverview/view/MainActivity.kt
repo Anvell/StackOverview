@@ -153,10 +153,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         when(screen) {
             ActiveScreen.DETAILS -> {
                 searchView.onActionViewCollapsed()
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragment, DetailsFragment(), DetailsFragment.TAG)
-                        .addToBackStack(null)
-                        .commit()
+
+                if(supportFragmentManager.findFragmentById(R.id.mainFragment) !is DetailsFragment) {
+                    supportFragmentManager.beginTransaction()
+                            .replace(R.id.mainFragment, DetailsFragment(), DetailsFragment.TAG)
+                            .addToBackStack(null)
+                            .commit()
+                }
             }
 
             ActiveScreen.SEARCH -> {
