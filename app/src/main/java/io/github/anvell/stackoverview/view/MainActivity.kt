@@ -1,35 +1,38 @@
 package io.github.anvell.stackoverview.view
 
+import android.animation.LayoutTransition
 import android.arch.lifecycle.Lifecycle.State.RESUMED
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import io.github.anvell.stackoverview.R
 import io.github.anvell.stackoverview.enumeration.ActiveScreen
 import io.github.anvell.stackoverview.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import android.animation.LayoutTransition
-import android.widget.LinearLayout
 
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var searchView: SearchView
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        toolbar = toolbar_view as Toolbar
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -46,9 +49,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             navigate(ActiveScreen.SEARCH)
         }
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            toolbar.elevation = 4f
-        }
     }
 
     override fun onBackPressed() {
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun displayConnectionWarning() {
-        Snackbar.make(toolbar, R.string.error_no_connection, Snackbar.LENGTH_LONG).apply {
+        Snackbar.make(toolbar_view, R.string.error_no_connection, Snackbar.LENGTH_LONG).apply {
             setAction(R.string.error_no_connection_button_label, {
                 val intent = Intent(Settings.ACTION_SETTINGS)
                 startActivity(intent)
