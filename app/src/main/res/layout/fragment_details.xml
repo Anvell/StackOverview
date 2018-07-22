@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/text_margin"
-        tools:context=".view.DetailsFragment">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/postVotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/text_margin"
-            android:paddingStart="0dp">
-
-            <TextView
-                android:id="@+id/postVotesText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/chip_frame"
-                android:fontFamily="sans-serif-light"
-                android:padding="@dimen/text_margin_small"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@android:color/secondary_text_light"
-                tools:text="759" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/postTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/postVotes"
-            android:paddingTop="@dimen/text_margin_small"
-            tools:text="@tools:sample/lorem" />
-
-        <TextView
-            android:id="@+id/postBody"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontalBarrier"
-            tools:text="@string/lorem_ipsum" />
-
-        <android.support.constraint.Barrier
-            android:id="@+id/horizontalBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="postVotes,postTitle" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/answersView"
-            app:layout_constraintTop_toBottomOf="@id/postBody"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/fragment_details_answer_item"/>
+            android:padding="@dimen/text_margin"
+            tools:context=".view.DetailsFragment">
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+            <FrameLayout
+                android:id="@+id/postVotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/text_margin"
+                android:paddingStart="0dp">
+
+                <TextView
+                    android:id="@+id/postVotesText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/chip_frame"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="@dimen/text_margin_small"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@android:color/secondary_text_light"
+                    tools:text="759" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/postTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/text_margin_small"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/postVotes"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/postBody"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/horizontalBarrier"
+                tools:text="@string/lorem_ipsum" />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/horizontalBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="postVotes,postTitle" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/answersView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/postBody"
+                tools:listitem="@layout/fragment_details_answer_item" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>
