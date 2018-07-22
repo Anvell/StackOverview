@@ -1,29 +1,29 @@
-package io.github.anvell.stackoverview.view
+package io.github.anvell.stackoverview.view;
 
-import android.os.SystemClock
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
-import android.support.v7.widget.RecyclerView
-import android.widget.AutoCompleteTextView
-import com.squareup.rx2.idler.Rx2Idler
-import io.github.anvell.stackoverview.R
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import org.junit.BeforeClass
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
+import android.os.SystemClock;
+import android.support.test.espresso.Espresso.*;
+import android.support.test.espresso.action.ViewActions.*;
+import android.support.test.espresso.assertion.ViewAssertions.*;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers.*;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
+import android.widget.AutoCompleteTextView;
+import com.squareup.rx2.idler.Rx2Idler;
+import io.github.anvell.stackoverview.R;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.plugins.RxJavaPlugins;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4.class)
 class MainActivityTest {
 
+/*
     @Rule
-    @JvmField
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     companion object {
@@ -55,5 +55,6 @@ class MainActivityTest {
         onView(withId(R.id.searchResults)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
     }
+*/
 
 }

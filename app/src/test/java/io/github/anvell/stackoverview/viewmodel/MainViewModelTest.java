@@ -1,26 +1,21 @@
-package io.github.anvell.stackoverview.viewmodel
+package io.github.anvell.stackoverview.viewmodel;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import io.github.anvell.stackoverview.enumeration.ActiveScreen
-import io.github.anvell.stackoverview.model.Question
-import io.github.anvell.stackoverview.model.QuestionDetails
-import io.github.anvell.stackoverview.model.QuestionsResponse
-import io.github.anvell.stackoverview.model.ResponseBase
-import io.github.anvell.stackoverview.repository.StackOverflowRepository
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import org.hamcrest.core.Is.`is`
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import android.arch.core.executor.testing.InstantTaskExecutorRule;
+import io.github.anvell.stackoverview.enumeration.ActiveScreen;
+import io.github.anvell.stackoverview.model.*;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
+import org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito.*;
 
+/*
 class MainViewModelTest {
 
     private val testTitle = "FIRST"
@@ -99,4 +94,4 @@ class MainViewModelTest {
         assertThat(viewModel.activeScreen.value, `is`(ActiveScreen.DETAILS))
         assertThat(viewModel.selectedQuestion.value!!.title, `is`(testTitle))
     }
-}
+}*/
