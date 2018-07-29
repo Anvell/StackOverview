@@ -1,14 +1,15 @@
 package io.github.anvell.stackoverview.view;
 
 import android.animation.LayoutTransition;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -21,10 +22,11 @@ import android.widget.LinearLayout;
 import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.databinding.ActivityMainBinding;
 import io.github.anvell.stackoverview.enumeration.ActiveScreen;
+import io.github.anvell.stackoverview.model.QuestionDetails;
 import io.github.anvell.stackoverview.viewmodel.MainViewModel;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
-import static io.github.anvell.stackoverview.enumeration.ActiveScreen.*;
+import static io.github.anvell.stackoverview.enumeration.ActiveScreen.DETAILS;
 import static io.github.anvell.stackoverview.enumeration.ActiveScreen.SEARCH;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -42,47 +44,78 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar = (Toolbar)binding.toolbarView;
         setSupportActionBar(toolbar);
 
+        ActionBar supportActionBar = getSupportActionBar();
+        if(supportActionBar != null) {
+            getSupportActionBar().setCustomView(searchView);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+        }
+
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        if (viewModel.activeScreen.getValue() != null) {
-            setupHomeIcon(viewModel.activeScreen.getValue());
-        }
         initObservers();
+        setupHomeIcon();
 
         if (savedInstanceState == null) {
             initFragments();
         }
+    }
 
-        toolbar.setNavigationOnClickListener(it -> {
-            viewModel.clearSelectedQuestion();
-            navigate(SEARCH);
-        });
+    @Override
+    public boolean onSupportNavigateUp() {
+        invalidateOptionsMenu();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        }
+        setupHomeIcon();
+        return super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        viewModel.clearSelectedQuestion();
+        this.onNavigateUp();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        MenuItem mi = menu.findItem(R.id.mi_search_view);
-        searchView = (SearchView) mi.getActionView();
+        MenuItem favorite = menu.findItem(R.id.mi_favorite);
+        favorite.setVisible(viewModel.activeScreen.getValue() == DETAILS);
+
+        QuestionDetails question = viewModel.selectedQuestion.getValue();
+        if(question != null) {
+            favorite.setIcon(getResources()
+                            .getDrawable(question.isFavorite?
+                                         R.drawable.ic_star :
+                                         R.drawable.ic_star_hollow));
+            favorite.setChecked(question.isFavorite);
+        }
+
+        MenuItem searchItem = menu.findItem(R.id.mi_search_view);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         LinearLayout searchBar = searchView.findViewById(R.id.search_bar);
         searchBar.setLayoutTransition(new LayoutTransition());
 
         searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(() -> {
 
-            if (viewModel.selectedQuestion.getValue() != null) {
-                if (viewModel.activeScreen.getValue() != DETAILS) {
-                    navigate(DETAILS);
-                }
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
             }
-            return false;
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (viewModel.activeScreen.getValue() == SEARCH) {
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    setupHomeIcon();
+                }
+                return true;
+            }
         });
 
         searchView.setImeOptions(searchView.getImeOptions() | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -90,11 +123,28 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.mi_favorite) {
+            if(!item.isChecked()) {
+                item.setIcon(getResources().getDrawable(R.drawable.ic_star));
+                viewModel.storeSelectedQuestion();
+                item.setChecked(true);
+            } else {
+                item.setIcon(getResources().getDrawable(R.drawable.ic_star_hollow));
+                viewModel.deleteSelectedQuestion();
+                item.setChecked(false);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
 
         if (query != null) {
             searchView.clearFocus();
-            searchView.onActionViewCollapsed();
             viewModel.submitQuery(query);
         }
         return false;
@@ -128,15 +178,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
     }
 
-    private void setupHomeIcon(ActiveScreen screen) {
-        switch (screen) {
-            case DETAILS:
-                toolbar.setNavigationIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_back, null));
-                break;
-            case SEARCH:
-                toolbar.setNavigationIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_code, null));
-                break;
-        }
+    private void setupHomeIcon() {
+        boolean rootScreen = getSupportFragmentManager().getBackStackEntryCount() == 0;
+        toolbar.setNavigationIcon(ResourcesCompat.getDrawable(getResources(),
+                                  rootScreen? R.drawable.ic_code : R.drawable.ic_back, null));
     }
 
     private void displayConnectionWarning() {
@@ -159,39 +204,48 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
 
         switch (activeScreen) {
+            case COLLECTION:
+                addMainFragment(new CollectionFragment(), CollectionFragment.TAG);
+                break;
             case SEARCH:
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mainFragment, new SearchResultsFragment(), SearchResultsFragment.TAG)
-                        .commit();
+                addMainFragment(new SearchResultsFragment(), SearchResultsFragment.TAG);
                 break;
             case DETAILS:
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mainFragment, new DetailsFragment(), DetailsFragment.TAG)
-                        .commit();
+                addMainFragment(new DetailsFragment(), DetailsFragment.TAG);
                 break;
         }
     }
 
-    private Boolean navigate(ActiveScreen screen) {
+    private void navigate(ActiveScreen screen) {
         switch (screen) {
-            case DETAILS:
-                searchView.onActionViewCollapsed();
+            case COLLECTION:
+                replaceMainFragment(new CollectionFragment(), CollectionFragment.TAG);
+                break;
 
-                if (!(getSupportFragmentManager().findFragmentById(R.id.mainFragment) instanceof DetailsFragment)) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainFragment, new DetailsFragment(), DetailsFragment.TAG)
-                            .addToBackStack(null)
-                            .commit();
-                }
+            case DETAILS:
+                invalidateOptionsMenu();
+                replaceMainFragment(new DetailsFragment(), DetailsFragment.TAG);
                 break;
 
             case SEARCH:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportFragmentManager().popBackStack();
-                }
+                replaceMainFragment(new SearchResultsFragment(), SearchResultsFragment.TAG);
                 break;
         }
-        setupHomeIcon(screen);
-        return true;
+        setupHomeIcon();
+    }
+
+    private void addMainFragment(Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.mainFragment, fragment, tag)
+                .commit();
+    }
+
+    private void replaceMainFragment(Fragment fragment, String tag) {
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.mainFragment, fragment, tag)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

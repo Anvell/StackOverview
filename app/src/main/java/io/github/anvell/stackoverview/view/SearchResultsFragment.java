@@ -20,6 +20,7 @@ import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.adapter.BaseAdapter.OnInteractionListener;
 import io.github.anvell.stackoverview.adapter.SearchResultsAdapter;
 import io.github.anvell.stackoverview.databinding.FragmentSearchresultsBinding;
+import io.github.anvell.stackoverview.enumeration.ActiveScreen;
 import io.github.anvell.stackoverview.listener.EndlessScrollListener;
 import io.github.anvell.stackoverview.model.Question;
 import io.github.anvell.stackoverview.viewmodel.MainViewModel;
@@ -45,6 +46,7 @@ public class SearchResultsFragment extends Fragment implements OnInteractionList
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = ViewModelProviders.of(requireActivity()).get(MainViewModel.class);
+        viewModel.activeScreen.setValue(ActiveScreen.SEARCH);
         initResultsList();
         initObservers();
     }

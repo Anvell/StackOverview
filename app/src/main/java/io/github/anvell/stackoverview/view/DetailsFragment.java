@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import io.github.anvell.stackoverview.adapter.AnswersAdapter;
 import io.github.anvell.stackoverview.databinding.FragmentDetailsBinding;
+import io.github.anvell.stackoverview.enumeration.ActiveScreen;
 import io.github.anvell.stackoverview.extension.Utils;
 import io.github.anvell.stackoverview.model.QuestionDetails;
 import io.github.anvell.stackoverview.viewmodel.MainViewModel;
@@ -36,6 +37,7 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = ViewModelProviders.of(requireActivity()).get(MainViewModel.class);
+        viewModel.activeScreen.setValue(ActiveScreen.DETAILS);
         initObservers();
     }
 
