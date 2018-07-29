@@ -6,7 +6,16 @@
         android:id="@+id/mi_search_view"
         android:icon="@drawable/ic_search"
         app:queryHint="@string/hint_search"
-        app:showAsAction="ifRoom"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
+        android:contentDescription="@string/hint_search"
         android:title="@string/hint_search" />
+    <item
+        android:id="@+id/mi_favorite"
+        android:icon="@drawable/ic_star_hollow"
+        android:title="@string/mi_favorite"
+        android:orderInCategory="100"
+        android:checkable="true"
+        android:contentDescription="@string/mi_favorite"
+        app:showAsAction="always" />
 </menu>

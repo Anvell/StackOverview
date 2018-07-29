@@ -10,5 +10,6 @@
     android:theme="@style/Base.Theme.AppCompat.Light"
     android:animateLayoutChanges="true"
     app:navigationIcon="@drawable/ic_code"
+    app:contentInsetStartWithNavigation="0dp"
     android:elevation="@dimen/toolbar_elevation"
     tools:showIn="@layout/activity_main"/>
