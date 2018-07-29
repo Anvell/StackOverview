@@ -1,4 +1,5 @@
 # Stack Overview
-<img align="right" src="https://github.com/Anvell/anvell.github.io/blob/master/StackOverview.gif">
 
-Simple stack overflow search app in Kotlin using ViewModel/LiveData.
+Stack Overview is a lightweight application that provides
+a way to quickly search Stack Overflow, bookmark useful
+entries and track hot questions using home screen widget.
