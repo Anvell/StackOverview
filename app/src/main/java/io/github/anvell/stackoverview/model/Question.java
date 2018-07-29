@@ -1,12 +1,20 @@
 package io.github.anvell.stackoverview.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Question {
+
+    @PrimaryKey
+    @SerializedName("question_id")
+    public int questionId;
 
     @SerializedName("tags")
     public ArrayList<String> tags = new ArrayList<>();
@@ -25,9 +33,6 @@ public class Question {
 
     @SerializedName("creation_date")
     public int creationDate;
-
-    @SerializedName("question_id")
-    public int questionId;
 
     @SerializedName("title")
     public String title = "";
