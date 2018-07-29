@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter<T>.ViewHolder> {
 
@@ -14,16 +15,16 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter<T>
         void onListInteraction(T item);
     }
 
-    private ArrayList<T> values;
+    private List<T> values;
     private OnInteractionListener<T> interactionListener;
     private View.OnClickListener listener;
 
-    public BaseAdapter(ArrayList<T> values, OnInteractionListener<T> interactionListener) {
+    public BaseAdapter(List<T> values, OnInteractionListener<T> interactionListener) {
         this.values = values;
         this.interactionListener = interactionListener;
 
         listener = v -> {
-            if (v.getTag() != null) {
+            if (v.getTag() != null && interactionListener != null) {
                 interactionListener.onListInteraction((T) v.getTag());
             }
         };
@@ -33,7 +34,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseAdapter<T>
 
     abstract int getResourceId();
 
-    public void replaceItems(ArrayList<T> newValues) {
+    public void replaceItems(List<T> newValues) {
         values = newValues;
         notifyDataSetChanged();
     }

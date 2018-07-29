@@ -12,6 +12,7 @@ import io.github.anvell.stackoverview.model.Answer;
 import io.github.anvell.stackoverview.model.Question;;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class AnswersAdapter extends BaseAdapter<Answer> {
 
@@ -44,7 +45,7 @@ public class AnswersAdapter extends BaseAdapter<Answer> {
         answerBody.setText(Utils.fromHtml(item.body));
         postOwner.setText(item.owner.displayName);
 
-        Date date = new Date(item.creationDate * 1000);
+        Date date = new Date(TimeUnit.MILLISECONDS.convert(item.creationDate, TimeUnit.SECONDS));
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         postedDate.setText(format.format(date));
 

@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.extension.Utils;
@@ -11,7 +12,7 @@ import io.github.anvell.stackoverview.model.Question;
 
 public class SearchResultsAdapter extends BaseAdapter<Question> {
 
-    public SearchResultsAdapter(ArrayList<Question> values,
+    public SearchResultsAdapter(List<Question> values,
                          OnInteractionListener<Question> interactionListener) {
         super(values, interactionListener);
     }
