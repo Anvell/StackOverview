@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 import io.github.anvell.stackoverview.model.Question;
 
-@Database(entities = {Question.class}, version = 1)
+@Database(entities = {Question.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
