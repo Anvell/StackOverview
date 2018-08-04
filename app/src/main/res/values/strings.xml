@@ -11,4 +11,10 @@
     <string name="answer_accepted">Answer is accepted</string>
 
     <string name="mi_favorite">Favorite</string>
+
+    <string name="ads_id">ca-app-pub-3940256099942544~3347511713</string>
+
+    <string name="analytics_action_open">open</string>
+    <string name="analytics_category_search">search_results</string>
+    <string name="analytics_category_collection">local_collection</string>
 </resources>

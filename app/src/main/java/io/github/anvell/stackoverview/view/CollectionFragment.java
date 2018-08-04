@@ -11,11 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.adapter.BaseAdapter;
 import io.github.anvell.stackoverview.adapter.SearchResultsAdapter;
+import io.github.anvell.stackoverview.analytics.StackAnalytics;
 import io.github.anvell.stackoverview.databinding.FragmentCollectionBinding;
 import io.github.anvell.stackoverview.enumeration.ActiveScreen;
 import io.github.anvell.stackoverview.model.Question;
@@ -34,6 +39,10 @@ public class CollectionFragment extends Fragment implements BaseAdapter.OnIntera
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentCollectionBinding.inflate(inflater, container, false);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+
         return binding.getRoot();
     }
 
@@ -50,6 +59,7 @@ public class CollectionFragment extends Fragment implements BaseAdapter.OnIntera
     @Override
     public void onListInteraction(Question item) {
         viewModel.requestQuestion(item.questionId);
+        StackAnalytics.onCollectionOpen(item.title);
     }
 
     private void initCollection() {

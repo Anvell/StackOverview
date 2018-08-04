@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.ads.MobileAds;
+
 import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.databinding.ActivityMainBinding;
 import io.github.anvell.stackoverview.enumeration.ActiveScreen;
