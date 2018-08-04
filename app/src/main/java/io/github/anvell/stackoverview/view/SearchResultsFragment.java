@@ -14,11 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.ArrayList;
 
 import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.adapter.BaseAdapter.OnInteractionListener;
 import io.github.anvell.stackoverview.adapter.SearchResultsAdapter;
+import io.github.anvell.stackoverview.analytics.StackAnalytics;
 import io.github.anvell.stackoverview.databinding.FragmentSearchresultsBinding;
 import io.github.anvell.stackoverview.enumeration.ActiveScreen;
 import io.github.anvell.stackoverview.listener.EndlessScrollListener;
@@ -53,6 +57,7 @@ public class SearchResultsFragment extends Fragment implements OnInteractionList
 
     @Override public void onListInteraction(Question item) {
         viewModel.requestQuestion(item.questionId);
+        StackAnalytics.onSearchResultOpen(item.title);
     }
 
     private void initResultsList() {

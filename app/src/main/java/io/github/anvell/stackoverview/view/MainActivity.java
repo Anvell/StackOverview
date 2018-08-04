@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         if (savedInstanceState == null) {
             initFragments();
-            MobileAds.initialize(this, getString(R.string.ads_id));
         }
     }
 

@@ -28,7 +28,19 @@ public class StackOverflowRepository {
     private QuestionDao userCollection;
     public MutableLiveData<Boolean> connectionAvailable = new MutableLiveData<>();
 
-    public StackOverflowRepository(@NonNull Application application) {
+    private static volatile StackOverflowRepository instance = null;
+
+    public static void initialize(@NonNull Application application) {
+        if(instance == null) {
+            instance = new StackOverflowRepository(application);
+        }
+    }
+
+    public static StackOverflowRepository getInstance() {
+        return instance;
+    }
+
+    private StackOverflowRepository(@NonNull Application application) {
         connectionAvailable.setValue(true);
         userCollection = AppDatabase.get(application).questionDao();
     }
