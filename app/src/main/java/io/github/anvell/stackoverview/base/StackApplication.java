@@ -2,6 +2,7 @@ package io.github.anvell.stackoverview.base;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -19,5 +20,6 @@ public class StackApplication extends Application {
         StackOverflowRepository.initialize(this);
         StackAnalytics.initialize(this);
         MobileAds.initialize(this, getString(R.string.ads_id));
+        Stetho.initializeWithDefaults(this);
     }
 }
