@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/text_margin_small"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/hotTitle"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_toStartOf="@id/infoBlock"
+        android:ellipsize="end"
+        android:theme="@style/AppTheme.Widget.Title"
+        tools:text="@tools:sample/lorem" />
+
+    <LinearLayout
+        android:id="@+id/infoBlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/hotViews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawableStart="@drawable/ic_eye_small"
+            android:drawablePadding="@dimen/text_margin_small"
+            style="@style/AppTheme.Widget.Small"
+            tools:text="15" />
+
+        <TextView
+            android:id="@+id/hotComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/AppTheme.Widget.Small"
+            android:drawableStart="@drawable/ic_comment_small"
+            android:drawablePadding="@dimen/text_margin_small"
+            tools:text="564" />
+    </LinearLayout>
+</RelativeLayout>

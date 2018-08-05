@@ -6,4 +6,6 @@
     <dimen name="icon_avatar">48dp</dimen>
 
     <dimen name="toolbar_elevation">4dp</dimen>
+
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

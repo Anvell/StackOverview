@@ -6,4 +6,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Widget.Title" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="AppTheme.Widget.Small" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

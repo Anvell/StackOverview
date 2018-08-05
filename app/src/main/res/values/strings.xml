@@ -17,4 +17,7 @@
     <string name="analytics_action_open">open</string>
     <string name="analytics_category_search">search_results</string>
     <string name="analytics_category_collection">local_collection</string>
+
+    <string name="widget_icon_eye">Views</string>
+    <string name="widget_icon_comments">Comments</string>
 </resources>

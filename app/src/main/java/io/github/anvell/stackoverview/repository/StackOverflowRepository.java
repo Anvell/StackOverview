@@ -20,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
 
 public class StackOverflowRepository {
 
@@ -49,6 +50,10 @@ public class StackOverflowRepository {
         if (available != connectionAvailable.getValue()) {
             connectionAvailable.postValue(available);
         }
+    }
+
+    public Call<QuestionsResponse> requestHotQuestions() {
+        return ApiClient.getClient().requestHotQuestions();
     }
 
     public Observable<QuestionsResponse> searchQuestions(String query, int page) {
