@@ -26,7 +26,6 @@ public class AppWidget extends AppWidgetProvider {
 
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.app_widget);
         rv.setRemoteAdapter(R.id.widgetList, intent);
-        rv.setEmptyView(R.id.widgetList, R.id.empty_view);
 
         Intent toastIntent = new Intent(context, AppWidget.class);
         toastIntent.setAction(EXTRA_OPEN_ACTION);
@@ -50,10 +49,10 @@ public class AppWidget extends AppWidgetProvider {
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
             Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
 
-            /*Intent activityIntent = new Intent(context, MainActivity.class);
+            Intent activityIntent = new Intent(context, MainActivity.class);
             activityIntent.putExtra("id", String.valueOf(viewIndex));
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(activityIntent);*/
+            context.startActivity(activityIntent);
         }
         super.onReceive(context, intent);
     }
