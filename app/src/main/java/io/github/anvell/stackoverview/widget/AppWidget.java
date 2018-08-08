@@ -41,16 +41,11 @@ public class AppWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-
         if (intent.getAction() != null && intent.getAction().equals(EXTRA_OPEN_ACTION)) {
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-            int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-            Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
+            int id = intent.getIntExtra(EXTRA_ITEM, 0);
 
             Intent activityIntent = new Intent(context, MainActivity.class);
-            activityIntent.putExtra("id", String.valueOf(viewIndex));
+            activityIntent.putExtra(MainActivity.INTENT_OPEN_QUESTION, id);
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(activityIntent);
         }

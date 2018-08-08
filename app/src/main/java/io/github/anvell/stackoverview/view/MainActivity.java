@@ -33,6 +33,8 @@ import static io.github.anvell.stackoverview.enumeration.ActiveScreen.SEARCH;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    public static final String INTENT_OPEN_QUESTION = "io.github.anvell.stackoverview.INTENT_OPEN_QUESTION";
+
     private MainViewModel viewModel;
     private SearchView searchView;
     private Toolbar toolbar;
@@ -59,6 +61,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         if (savedInstanceState == null) {
             initFragments();
+
+            Intent intent = getIntent();
+            int id = intent.getIntExtra(INTENT_OPEN_QUESTION, 0);
+
+            if(id > 0) {
+                viewModel.requestQuestion(id);
+            }
         }
     }
 
