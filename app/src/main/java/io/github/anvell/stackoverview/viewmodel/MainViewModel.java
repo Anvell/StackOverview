@@ -38,7 +38,7 @@ public class MainViewModel extends ViewModel {
     private PublishSubject<Query> querySubject = PublishSubject.create();
     private Query lastQuery = new Query("");
     private CompositeDisposable disposables = new CompositeDisposable();
-    public StackOverflowRepository repository = StackOverflowRepository.getInstance();
+    private StackOverflowRepository repository = StackOverflowRepository.getInstance();
 
     @SuppressLint("CheckResult")
     public MainViewModel() {
