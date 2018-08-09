@@ -27,14 +27,14 @@ public class AppWidget extends AppWidgetProvider {
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.app_widget);
         rv.setRemoteAdapter(R.id.widgetList, intent);
 
-        Intent toastIntent = new Intent(context, AppWidget.class);
-        toastIntent.setAction(EXTRA_OPEN_ACTION);
-        toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        Intent openActivityIntent = new Intent(context, AppWidget.class);
+        openActivityIntent.setAction(EXTRA_OPEN_ACTION);
+        openActivityIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-        PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
+        PendingIntent openActivityPendingIntent = PendingIntent.getBroadcast(context, 0, openActivityIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        rv.setPendingIntentTemplate(R.id.widgetList, toastPendingIntent);
+        rv.setPendingIntentTemplate(R.id.widgetList, openActivityPendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 

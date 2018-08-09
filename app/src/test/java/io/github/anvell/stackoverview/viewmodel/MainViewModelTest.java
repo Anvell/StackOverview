@@ -1,97 +1,115 @@
 package io.github.anvell.stackoverview.viewmodel;
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+
 import io.github.anvell.stackoverview.enumeration.ActiveScreen;
-import io.github.anvell.stackoverview.model.*;
+import io.github.anvell.stackoverview.model.Question;
+import io.github.anvell.stackoverview.model.QuestionDetails;
+import io.github.anvell.stackoverview.model.QuestionsResponse;
+import io.github.anvell.stackoverview.model.ResponseBase;
+import io.github.anvell.stackoverview.repository.StackOverflowRepository;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
-import org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito.*;
 
-/*
-class MainViewModelTest {
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    private val testTitle = "FIRST"
-    private val testTitleNext = "SECOND"
-    private val testQuery = "QUERY"
+@RunWith(JUnit4.class)
+public class MainViewModelTest {
 
-    private lateinit var viewModel: MainViewModel
+    private static final String testTitle = "FIRST";
+    private static final String testTitleNext = "SECOND";
+    private static final String testQuery = "QUERY";
+
+    private MainViewModel viewModel;
 
     @Mock
-    private lateinit var testRepository: StackOverflowRepository
+    private StackOverflowRepository testRepository;
 
     // Ensure single thread for LiveData
     @Rule
-    @JvmField
-    var instantExecutorRule = InstantTaskExecutorRule()
+    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Before
-    fun setUp() {
+    public void setUp() {
 
         // Ensure single thread for RxJava
-        RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-        RxJavaPlugins.setComputationSchedulerHandler { Schedulers.trampoline() }
-        RxJavaPlugins.setNewThreadSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        RxJavaPlugins.setIoSchedulerHandler(it -> Schedulers.trampoline());
+        RxJavaPlugins.setComputationSchedulerHandler(it -> Schedulers.trampoline());
+        RxJavaPlugins.setNewThreadSchedulerHandler(it -> Schedulers.trampoline());
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(it -> Schedulers.trampoline());
 
-        testRepository = mock(StackOverflowRepository::class.java)
-        `when`(testRepository.requestQuestion(1)).thenReturn(
-                Single.just(ResponseBase(
-                        listOf(QuestionDetails(title = testTitle))
+        QuestionDetails details = new QuestionDetails();
+        details.title = testTitle;
+
+        testRepository = mock(StackOverflowRepository.class);
+        when(testRepository.requestQuestion(1)).thenReturn(
+                Single.just(new ResponseBase<>(
+                        new QuestionDetails[] { details }
                 ))
-        )
+        );
 
-        `when`(testRepository.searchQuestions(testQuery, 1)).thenReturn(
-                Observable.just(QuestionsResponse(
-                       items = listOf(Question(title = testTitle)),
-                       hasMore = true
-                ))
-        )
+        Question question = new Question();
+        question.title = testTitle;
+        QuestionsResponse response = new QuestionsResponse();
+        response.hasMore = true;
+        response.items.add(question);
 
-        `when`(testRepository.searchQuestions(testQuery, 2)).thenReturn(
-                Observable.just(QuestionsResponse(
-                        items = listOf(Question(title = testTitleNext)),
-                        hasMore = true
-                ))
-        )
+        when(testRepository.searchQuestions(testQuery, 1)).thenReturn(
+                Observable.just(response)
+        );
 
-        viewModel = MainViewModel()
-        viewModel.repository = testRepository
+        question = new Question();
+        question.title = testTitleNext;
+        response = new QuestionsResponse();
+        response.hasMore = true;
+        response.items.add(question);
+
+        when(testRepository.searchQuestions(testQuery, 2)).thenReturn(
+                Observable.just(response)
+        );
+
+        viewModel = new MainViewModel();
+        viewModel.repository = testRepository;
     }
 
     @Test
-    fun submitQuery() {
+    public void submitQuery() {
 
-        viewModel.submitQuery(testQuery)
+        viewModel.submitQuery(testQuery);
 
-        assertThat(viewModel.activeScreen.value, `is`(ActiveScreen.SEARCH))
-        assertThat(viewModel.questions.value!!.first().title, `is`(testTitle))
+        assertEquals(viewModel.activeScreen.getValue(), ActiveScreen.SEARCH);
+        assertEquals(viewModel.questions.getValue().get(0).title, testTitle);
     }
 
     @Test
-    fun requestMore() {
+    public void requestMore() {
 
-        viewModel.submitQuery(testQuery)
-        viewModel.requestMore()
+        viewModel.submitQuery(testQuery);
+        viewModel.requestMore();
 
-        assertThat(viewModel.activeScreen.value, `is`(ActiveScreen.SEARCH))
-        assertThat(viewModel.questions.value!![0].title, `is`(testTitle))
-        assertThat(viewModel.questions.value!![1].title, `is`(testTitleNext))
+        assertEquals(viewModel.activeScreen.getValue(), ActiveScreen.SEARCH);
+        assertEquals(viewModel.questions.getValue().get(0).title, testTitle);
+        assertEquals(viewModel.questions.getValue().get(1).title, testTitleNext);
     }
 
     @Test
-    fun requestQuestion() {
+    public void requestQuestion() {
 
-        viewModel.requestQuestion(1)
+        viewModel.requestQuestion(1);
 
-        assertThat(viewModel.activeScreen.value, `is`(ActiveScreen.DETAILS))
-        assertThat(viewModel.selectedQuestion.value!!.title, `is`(testTitle))
+        assertEquals(viewModel.activeScreen.getValue(), ActiveScreen.DETAILS);
+        assertEquals(viewModel.selectedQuestion.getValue().title, testTitle);
     }
-}*/
+}
