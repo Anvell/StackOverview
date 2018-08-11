@@ -6,6 +6,6 @@
     <color name="colorGreyBackground">#e1e1e1</color>
 
     <color name="ic_launcher_background">#DE8C11</color>
-    <color name="widget_background">#91ffffff</color>
+    <color name="widget_background">#e1ffffff</color>
     <color name="widget_frame_background">#cb080808</color>
 </resources>

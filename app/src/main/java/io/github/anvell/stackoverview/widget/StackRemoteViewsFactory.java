@@ -1,6 +1,5 @@
 package io.github.anvell.stackoverview.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,12 +21,9 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private ArrayList<Question> questions = new ArrayList<>();
     private Context context;
-    private int appWidgetId;
 
     public StackRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
     public void onCreate() {
@@ -89,7 +85,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 questions.addAll(data.items);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Can't fetch data, let's wait for user or JobDispatcher to try again
         }
     }
 }
