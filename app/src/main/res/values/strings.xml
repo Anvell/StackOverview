@@ -20,5 +20,5 @@
 
     <string name="widget_icon_eye">Views</string>
     <string name="widget_icon_comments">Comments</string>
-    <string name="widget_tap_to_refresh">Tap to refresh...</string>
+    <string name="widget_tap_to_refresh">Tap to refresh…</string>
 </resources>

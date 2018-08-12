@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide;
 import io.github.anvell.stackoverview.R;
 import io.github.anvell.stackoverview.extension.Utils;
 import io.github.anvell.stackoverview.model.Answer;
-import io.github.anvell.stackoverview.model.Question;;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;

@@ -13,18 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="Lorem ipsum" />
 
     <TextView
         android:id="@+id/questionVotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin_small"
+        android:layout_marginTop="@dimen/text_margin_small"
+        android:layout_marginBottom="@dimen/text_margin_small"
         android:background="@drawable/chip_frame"
         android:padding="@dimen/text_margin_small"
         style="@style/Base.TextAppearance.AppCompat.Caption"
         android:textColor="@android:color/secondary_text_light"
         app:layout_constraintTop_toBottomOf="@+id/questionTitle"
+        app:layout_constraintStart_toStartOf="@+id/questionTitle"
         tools:text="4566 votes" />
 
     <TextView
